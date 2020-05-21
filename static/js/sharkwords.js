@@ -11,14 +11,23 @@ let numWrong = 0;
 // Loop over the chars in `word` and create divs.
 //
 const createDivsForChars = (word) => {
-  // Replace this with your code
+  const letters = Array.from(word);
+
+  for (const char of letters) {
+    $('#word-container').append(`<div class="letter-box ${char}"></div>`);
+  }
+
 };
 
 
 // Loop over each letter in `ALPHABET` and generate buttons.
 //
-const generateLetterButtons = () => {
-  // Replace this with your code
+const generateLetterButtons = (string=ALPHABET) => {
+  const letters = Array.from(string)
+
+  for (const char of letters) {
+    $('#letter-buttons').append(`<button>${char}</button>`);
+  }
 };
 
 
@@ -27,21 +36,30 @@ const generateLetterButtons = () => {
 // `buttonEl` is an `HTMLElement` object.
 //
 const disableLetterButton = (buttonEl) => {
-  // Replace this with your code
+  const button = $(buttonEl);
+
+  button.attr('disabled', true);
 };
 
 
 // Return `true` if `letter` is in the word.
 //
 const isLetterInWord = (letter) => {
-  // Replace this with your code
+
+  return $(`div.${letter}`)[0] !== undefined;
 };
 
 
 // Called when `letter` is in word. Update contents of divs with `letter`.
 //
 const handleCorrectGuess = (letter) => {
-  // Replace this with your code
+  const yesGuess = $(`div.${letter}`)
+
+  for (const idx in yesGuess) {
+    if ($(`div.${letter}`)[idx] !== undefined); {
+      $(`.${letter}`).html(letter);
+    }
+  }
 };
 
 
@@ -51,22 +69,34 @@ const handleCorrectGuess = (letter) => {
 // message. Otherwise, increment `numWrong` and update the shark image.
 //
 const handleWrongGuess = () => {
-  // Replace this with your code
+  if (numWrong < 5) {
+    numWrong += 1;
+    $('#shark-img img').attr('src', `/static/images/guess${numWrong}.png`);
+  } else {
+    $('button').attr('disabled', true);
+    $('a').show();
+  }
 };
 
 
 // Reset game state. Called before restarting the game.
 //
 const resetGame = () => {
-  // Replace this with your code
+  $('#letter-buttons').empty();
+  $('#word-container').empty();
+  $('a').hide();
+  numWrong = 0;
+  $('#shark-img img').attr('src', `/static/images/guess${numWrong}.png`);
+
 };
 
 
 // This is like if __name__ == '__main__' in Python
 //
 (function startGame() {
-  // For now, we'll hardcode the word that the user has to guess.
-  const word = 'hello';
+  
+  const word = WORDS[Math.floor(Math.random()*WORDS.length)]
+
 
   createDivsForChars(word);
   generateLetterButtons();
